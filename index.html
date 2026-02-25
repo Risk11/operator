@@ -3,130 +3,304 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kirim Undangan - Generator</title>
+    <title>Generator Undangan - Vina & Iqbal</title>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      :root {
+        --primary: #5c3d46; /* Deep Rosewood */
+        --accent: #d4a5b2; /* Sakura Pink */
+        --gold: #b5904d; /* Vintage Gold */
+        --bg-grad: linear-gradient(135deg, #fffbfb 0%, #f9f1f3 100%);
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --text: #4a4a4a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
         font-family: "Nunito Sans", sans-serif;
-        background: #f4f7f6;
-        color: #333;
-        padding: 20px;
+        background: var(--bg-grad);
+        color: var(--text);
+        padding: 40px 20px;
+        min-height: 100vh;
       }
+
       .container {
-        max-width: 800px;
+        max-width: 850px;
         margin: 0 auto;
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(92, 61, 70, 0.08);
+        border: 1px solid rgba(212, 165, 178, 0.3);
+        backdrop-filter: blur(10px);
       }
-      h2 {
-        color: #5c3d46;
-        border-bottom: 2px solid #d4a5b2;
-        padding-bottom: 10px;
+
+      .header-title {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
       }
+
+      .header-title h2 {
+        font-family: "Cormorant Garamond", serif;
+        color: var(--primary);
+        font-size: 2.8rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .header-title p {
+        color: #888;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .header-title::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 2px;
+        background: var(--gold);
+        margin: 15px auto 0;
+      }
+
+      .info-box {
+        background: rgba(212, 165, 178, 0.1);
+        border-left: 4px solid var(--accent);
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 0 12px 12px 0;
+        font-size: 0.95rem;
+        color: var(--primary);
+      }
+
+      .info-box ul {
+        margin-top: 10px;
+        padding-left: 20px;
+      }
+
+      .info-box li {
+        margin-bottom: 5px;
+      }
+
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
       }
+
       label {
         display: block;
-        font-weight: bold;
+        font-weight: 700;
         margin-bottom: 8px;
+        color: var(--primary);
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
+
       input[type="text"],
       textarea {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        box-sizing: border-box;
+        padding: 16px;
+        border: 1px solid #eaddd0;
+        border-radius: 12px;
+        background: #fdfafb;
+        font-family: "Nunito Sans", sans-serif;
+        font-size: 1rem;
+        color: var(--text);
+        transition: all 0.3s ease;
       }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(212, 165, 178, 0.2);
+        background: white;
+      }
+
       .btn-group {
         display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
+        gap: 12px;
+        margin-bottom: 15px;
         flex-wrap: wrap;
       }
-      button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s;
-      }
+
       .btn-template {
-        background: #eee;
-        color: #333;
+        background: white;
+        color: var(--primary);
+        border: 1px solid var(--accent);
+        padding: 10px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
       }
-      .btn-template:hover,
+
+      .btn-template:hover {
+        background: rgba(212, 165, 178, 0.1);
+        transform: translateY(-2px);
+      }
+
       .btn-template.active {
-        background: #d4a5b2;
+        background: var(--primary);
         color: white;
+        border-color: var(--primary);
+        box-shadow: 0 5px 15px rgba(92, 61, 70, 0.2);
       }
+
       .btn-primary {
-        background: #5c3d46;
+        background: linear-gradient(135deg, var(--primary), #7d5a63);
         color: white;
         width: 100%;
-        padding: 15px;
-        font-size: 16px;
-        margin-top: 10px;
+        padding: 18px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        margin-top: 20px;
+        cursor: pointer;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(92, 61, 70, 0.2);
       }
+
       .btn-primary:hover {
-        background: #422a30;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 25px rgba(92, 61, 70, 0.3);
       }
+
+      .table-wrapper {
+        overflow-x: auto;
+        margin-top: 40px;
+      }
+
       .result-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 30px;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
       }
+
       .result-table th,
       .result-table td {
-        border: 1px solid #ddd;
-        padding: 12px;
+        padding: 18px;
         text-align: left;
+        border-bottom: 1px solid #f0e6e8;
       }
+
       .result-table th {
-        background: #f9f9f9;
+        background: var(--primary);
+        color: white;
+        font-weight: 600;
+        letter-spacing: 1px;
       }
+
+      .result-table tr:hover {
+        background: #fdfafb;
+      }
+
+      .result-table td strong {
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
       .action-btns button {
-        font-size: 12px;
-        margin-right: 5px;
-        padding: 6px 10px;
+        font-size: 0.8rem;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
       }
+
+      .action-btns button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-copy {
+        background: #e9ecef;
+        color: #495057;
+      }
+      .btn-copy:hover {
+        background: #dee2e6;
+      }
+
       .btn-wa {
         background: #25d366;
         color: white;
       }
-      .btn-copy {
-        background: #007bff;
-        color: white;
+      .btn-wa:hover {
+        background: #128c7e;
       }
-      .info-box {
-        background: #e9f5ff;
-        border-left: 4px solid #007bff;
-        padding: 15px;
-        margin-bottom: 20px;
-        font-size: 14px;
+
+      /* Responsif untuk HP */
+      @media (max-width: 600px) {
+        .container {
+          padding: 25px 20px;
+        }
+        .header-title h2 {
+          font-size: 2rem;
+        }
+        .action-btns {
+          flex-direction: column;
+        }
+        .action-btns button {
+          width: 100%;
+          justify-content: center;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2>
-        <i class="fas fa-envelope-open-text"></i> Kirim Undangan Untuk Para Tamu
-      </h2>
+      <div class="header-title">
+        <h2>
+          <i
+            class="fas fa-envelope-open-text"
+            style="font-size: 2rem; color: var(--accent); margin-right: 10px"
+          ></i>
+          Guest Generator
+        </h2>
+        <p>Undangan Lebih Personal</p>
+      </div>
 
       <div class="info-box">
-        <strong>Petunjuk:</strong>
+        <strong><i class="fas fa-lightbulb"></i> Petunjuk Pengisian:</strong>
         <ul>
           <li>Masukkan nama-nama tamu (satu nama per baris).</li>
           <li>
-            Pilih teks pengantar, dan jangan hapus kode <code>[nama]</code>,
-            <code>[link-undangan]</code>, atau <code>[mempelai]</code>.
+            Pilih teks pengantar, dan <b>jangan hapus</b> kode
+            <code>[nama]</code>, <code>[link-undangan]</code>, atau
+            <code>[mempelai]</code>.
           </li>
         </ul>
       </div>
@@ -141,16 +315,16 @@
       </div>
 
       <div class="form-group">
-        <label>Yang Mengundang</label>
+        <label><i class="fas fa-user-edit"></i> Nama Yang Mengundang</label>
         <input
           type="text"
           id="nama-pengundang"
-          placeholder="Contoh: Keluarga Bapak Agus & Bapak Zulkifli"
+          placeholder="Contoh: Keluarga Bpk. Agus & Bpk. Zulkifli"
         />
       </div>
 
       <div class="form-group">
-        <label>Nama Mempelai</label>
+        <label><i class="fas fa-heart"></i> Nama Mempelai</label>
         <input
           type="text"
           id="nama-mempelai"
@@ -160,48 +334,45 @@
       </div>
 
       <div class="form-group">
-        <label
-          >List Nama Tamu Undangan (Gunakan baris baru/Enter untuk memisahkan
-          nama)</label
-        >
+        <label><i class="fas fa-users"></i> List Nama Tamu Undangan</label>
         <textarea
           id="list-tamu"
           rows="6"
-          placeholder="Budi Santoso
-Keluarga Andi
-Siti Aminah"
+          placeholder="1.&#10;2.&#10;3.&#10;dst.."
         ></textarea>
       </div>
 
       <div class="form-group">
-        <label>Pilihan Teks Pengantar</label>
+        <label><i class="fas fa-align-left"></i> Pilihan Teks Pengantar</label>
         <div class="btn-group">
           <button class="btn-template active" onclick="setTemplate('Formal')">
-            Formal
+            <i class="fas fa-star"></i> Formal
           </button>
           <button class="btn-template" onclick="setTemplate('Muslim')">
-            Muslim
+            <i class="fas fa-moon"></i> Muslim
           </button>
           <button class="btn-template" onclick="setTemplate('English')">
-            English
+            <i class="fas fa-globe"></i> English
           </button>
         </div>
-        <textarea id="pesan-template" rows="8"></textarea>
+        <textarea id="pesan-template" rows="9"></textarea>
       </div>
 
       <button class="btn-primary" onclick="generateList()">
-        BUAT DAFTAR NAMA TAMU
+        <i class="fas fa-magic"></i> BUAT DAFTAR TAMU
       </button>
 
-      <table class="result-table" id="tabel-hasil" style="display: none">
-        <thead>
-          <tr>
-            <th>Nama Tamu</th>
-            <th>Link & Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="hasil-body"></tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="result-table" id="tabel-hasil" style="display: none">
+          <thead>
+            <tr>
+              <th>Nama Tamu Spesial</th>
+              <th style="width: 350px">Aksi Cepat</th>
+            </tr>
+          </thead>
+          <tbody id="hasil-body"></tbody>
+        </table>
+      </div>
     </div>
 
     <script>
@@ -221,7 +392,7 @@ Siti Aminah"
         document
           .querySelectorAll(".btn-template")
           .forEach((btn) => btn.classList.remove("active"));
-        event.target.classList.add("active");
+        event.currentTarget.classList.add("active");
         document.getElementById("pesan-template").value = templates[type];
       }
 
@@ -247,7 +418,7 @@ Siti Aminah"
 
         listTamu.forEach((tamu) => {
           const namaFormat = tamu.trim();
-          // Membuat URL ramah URL (mengubah spasi menjadi + atau %20)
+          // Membuat URL ramah URL
           const linkPersonal = urlUtama + encodeURIComponent(namaFormat);
 
           // Mengganti variabel di dalam template pesan
@@ -260,8 +431,8 @@ Siti Aminah"
           const row = `<tr>
                 <td><strong>${namaFormat}</strong></td>
                 <td class="action-btns">
-                    <button class="btn-copy" onclick="copyText('${linkPersonal}')"><i class="fas fa-link"></i> Copy Link</button>
-                    <button class="btn-copy" onclick="copyText(\`${pesanAkhir.replace(/`/g, "\\`")}\`)"><i class="fas fa-copy"></i> Copy Teks</button>
+                    <button class="btn-copy" onclick="copyText('${linkPersonal}')"><i class="fas fa-link"></i> Link</button>
+                    <button class="btn-copy" onclick="copyText(\`${pesanAkhir.replace(/`/g, "\\`")}\`)"><i class="fas fa-copy"></i> Teks</button>
                     <button class="btn-wa" onclick="bukaWA(\`${encodeURIComponent(pesanAkhir)}\`)"><i class="fab fa-whatsapp"></i> Kirim WA</button>
                 </td>
             </tr>`;
@@ -269,6 +440,11 @@ Siti Aminah"
         });
 
         document.getElementById("tabel-hasil").style.display = "table";
+
+        // Scroll otomatis ke bagian tabel
+        document
+          .querySelector(".table-wrapper")
+          .scrollIntoView({ behavior: "smooth" });
       }
 
       function copyText(text) {
