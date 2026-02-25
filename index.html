@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kirim Undangan - Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Nunito Sans", sans-serif;
+        background: #f4f7f6;
+        color: #333;
+        padding: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        color: #5c3d46;
+        border-bottom: 2px solid #d4a5b2;
+        padding-bottom: 10px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      .btn-template {
+        background: #eee;
+        color: #333;
+      }
+      .btn-template:hover,
+      .btn-template.active {
+        background: #d4a5b2;
+        color: white;
+      }
+      .btn-primary {
+        background: #5c3d46;
+        color: white;
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      .btn-primary:hover {
+        background: #422a30;
+      }
+      .result-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+      }
+      .result-table th,
+      .result-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      .result-table th {
+        background: #f9f9f9;
+      }
+      .action-btns button {
+        font-size: 12px;
+        margin-right: 5px;
+        padding: 6px 10px;
+      }
+      .btn-wa {
+        background: #25d366;
+        color: white;
+      }
+      .btn-copy {
+        background: #007bff;
+        color: white;
+      }
+      .info-box {
+        background: #e9f5ff;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>
+        <i class="fas fa-envelope-open-text"></i> Kirim Undangan Untuk Para Tamu
+      </h2>
+
+      <div class="info-box">
+        <strong>Petunjuk:</strong>
+        <ul>
+          <li>Masukkan nama-nama tamu (satu nama per baris).</li>
+          <li>
+            Pilih teks pengantar, dan jangan hapus kode <code>[nama]</code>,
+            <code>[link-undangan]</code>, atau <code>[mempelai]</code>.
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-group" style="display: none">
+        <label>URL Utama Undangan</label>
+        <input
+          type="text"
+          id="url-undangan"
+          value="https://risk11.github.io/undangan_v_2/?to="
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Yang Mengundang</label>
+        <input
+          type="text"
+          id="nama-pengundang"
+          placeholder="Contoh: Keluarga Bapak Agus & Bapak Zulkifli"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Nama Mempelai</label>
+        <input
+          type="text"
+          id="nama-mempelai"
+          value="Vina & Iqbal"
+          placeholder="Contoh: Vina & Iqbal"
+        />
+      </div>
+
+      <div class="form-group">
+        <label
+          >List Nama Tamu Undangan (Gunakan baris baru/Enter untuk memisahkan
+          nama)</label
+        >
+        <textarea
+          id="list-tamu"
+          rows="6"
+          placeholder="Budi Santoso
+Keluarga Andi
+Siti Aminah"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Pilihan Teks Pengantar</label>
+        <div class="btn-group">
+          <button class="btn-template active" onclick="setTemplate('Formal')">
+            Formal
+          </button>
+          <button class="btn-template" onclick="setTemplate('Muslim')">
+            Muslim
+          </button>
+          <button class="btn-template" onclick="setTemplate('English')">
+            English
+          </button>
+        </div>
+        <textarea id="pesan-template" rows="8"></textarea>
+      </div>
+
+      <button class="btn-primary" onclick="generateList()">
+        BUAT DAFTAR NAMA TAMU
+      </button>
+
+      <table class="result-table" id="tabel-hasil" style="display: none">
+        <thead>
+          <tr>
+            <th>Nama Tamu</th>
+            <th>Link & Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="hasil-body"></tbody>
+      </table>
+    </div>
+
+    <script>
+      const templates = {
+        Formal:
+          "Kepada Yth. [nama],\n\nTanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir pada acara pernikahan kami:\n\n[mempelai]\n\nDetail informasi acara dapat dilihat pada tautan berikut:\n[link-undangan]\n\nKehadiran dan doa restu Anda sangat berarti bagi kami.\n\nSalam hormat,\n[pengundang]",
+        Muslim:
+          "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\nKepada Yth. [nama],\n\nDengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir pada acara pernikahan kami:\n\n[mempelai]\n\nDetail informasi acara dapat dilihat pada tautan berikut:\n[link-undangan]\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh\n\nSalam hormat,\n[pengundang]",
+        English:
+          "Dear [nama],\n\nTogether with our families, we joyfully invite you to share in our happiness as we celebrate our wedding:\n\n[mempelai]\n\nPlease find the details of our wedding at the link below:\n[link-undangan]\n\nYour presence and prayers will make our day truly special.\n\nWarm regards,\n[pengundang]",
+      };
+
+      // Set default template on load
+      document.getElementById("pesan-template").value = templates["Formal"];
+
+      function setTemplate(type) {
+        document
+          .querySelectorAll(".btn-template")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+        document.getElementById("pesan-template").value = templates[type];
+      }
+
+      function generateList() {
+        const urlUtama = document.getElementById("url-undangan").value;
+        const pengundang =
+          document.getElementById("nama-pengundang").value ||
+          "Kami yang berbahagia";
+        const mempelai = document.getElementById("nama-mempelai").value;
+        const rawTamu = document.getElementById("list-tamu").value;
+        const templatePesan = document.getElementById("pesan-template").value;
+
+        if (!rawTamu.trim()) {
+          alert("Silakan masukkan nama tamu terlebih dahulu!");
+          return;
+        }
+
+        const listTamu = rawTamu
+          .split("\n")
+          .filter((name) => name.trim() !== "");
+        const tbody = document.getElementById("hasil-body");
+        tbody.innerHTML = "";
+
+        listTamu.forEach((tamu) => {
+          const namaFormat = tamu.trim();
+          // Membuat URL ramah URL (mengubah spasi menjadi + atau %20)
+          const linkPersonal = urlUtama + encodeURIComponent(namaFormat);
+
+          // Mengganti variabel di dalam template pesan
+          let pesanAkhir = templatePesan
+            .replace(/\[nama\]/g, namaFormat)
+            .replace(/\[link-undangan\]/g, linkPersonal)
+            .replace(/\[mempelai\]/g, mempelai)
+            .replace(/\[pengundang\]/g, pengundang);
+
+          const row = `<tr>
+                <td><strong>${namaFormat}</strong></td>
+                <td class="action-btns">
+                    <button class="btn-copy" onclick="copyText('${linkPersonal}')"><i class="fas fa-link"></i> Copy Link</button>
+                    <button class="btn-copy" onclick="copyText(\`${pesanAkhir.replace(/`/g, "\\`")}\`)"><i class="fas fa-copy"></i> Copy Teks</button>
+                    <button class="btn-wa" onclick="bukaWA(\`${encodeURIComponent(pesanAkhir)}\`)"><i class="fab fa-whatsapp"></i> Kirim WA</button>
+                </td>
+            </tr>`;
+          tbody.innerHTML += row;
+        });
+
+        document.getElementById("tabel-hasil").style.display = "table";
+      }
+
+      function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Berhasil disalin ke clipboard!");
+        });
+      }
+
+      function bukaWA(pesanEncoded) {
+        window.open(`https://wa.me/?text=${pesanEncoded}`, "_blank");
+      }
+    </script>
+  </body>
+</html>
